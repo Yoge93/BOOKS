@@ -2,7 +2,7 @@ window.onload = function() {
   const ageGroupSelect = document.getElementById('ageGroup');
   const genreSelect = document.getElementById('genre');
   const emailInput = document.getElementById('email');
-  const recommendationButton = document.getElementById('getRecommendationsButton');
+  const recommendationButton = document.getElementById('recommendationButton');
   const recommendationsList = document.getElementById('recommendationsList');
 
   // Check if all elements are successfully selected
