@@ -1,14 +1,9 @@
-window.onload = function() {
+document.addEventListener('DOMContentLoaded', () => {
   const ageGroupSelect = document.getElementById('ageGroup');
   const genreSelect = document.getElementById('genre');
   const emailInput = document.getElementById('email');
-  const recommendationButton = document.getElementById('recommendationButton');
+  const recommendationButton = document.getElementById('getRecommendationsButton');
   const recommendationsList = document.getElementById('recommendationsList');
-
-  // Check if all elements are successfully selected
-  if (!ageGroupSelect || !genreSelect || !emailInput || !recommendationButton || !recommendationsList) {
-    console.error('One or more elements are missing in the DOM.');
-  }
 
   recommendationButton.addEventListener('click', () => {
     if (validateForm()) {
@@ -16,6 +11,7 @@ window.onload = function() {
     }
   });
 
+  // Form Validation
   function validateForm() {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailInput.value) {
@@ -29,6 +25,7 @@ window.onload = function() {
     return true;
   }
 
+  // Function to fetch book recommendations from Google Books API
   async function handleRecommendation() {
     const ageGroup = ageGroupSelect.value;
     const genre = genreSelect.value;
@@ -39,28 +36,31 @@ window.onload = function() {
     }
 
     try {
-      const response = await fetch('https://books-production-377c.up.railway.app/recommendations', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ageGroup, genre }),
-      });
-      const recommendations = await response.json();
-      displayRecommendations(recommendations);
+      // Construct the query string for Google Books API
+      const query = `${genre} ${ageGroup}`;
+      
+      // Fetch book data from Google Books API
+      const response = await fetch(`https://www.googleapis.com/books/v1/volumes?q=${query}`);
+      const data = await response.json();
+
+      // Display the book recommendations
+      displayRecommendations(data.items);
     } catch (error) {
       console.error('Error fetching recommendations:', error);
     }
   }
 
-  function displayRecommendations(recommendations) {
+  // Function to display book recommendations
+  function displayRecommendations(books) {
     recommendationsList.innerHTML = ''; // Clear existing recommendations
-    if (recommendations.length > 0) {
-      recommendations.forEach((book) => {
+    if (books && books.length > 0) {
+      books.forEach((book) => {
         const listItem = document.createElement('li');
-        listItem.textContent = book.title;
+        listItem.textContent = `${book.volumeInfo.title} by ${book.volumeInfo.authors ? book.volumeInfo.authors.join(', ') : 'Unknown Author'}`;
         recommendationsList.appendChild(listItem);
       });
     } else {
       recommendationsList.innerHTML = '<p>No recommendations found.</p>';
     }
   }
-};
+});
