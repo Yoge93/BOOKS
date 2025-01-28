@@ -26,7 +26,7 @@ document.addEventListener("DOMContentLoaded", function () {
       }
   
       try {
-        const response = await fetch('http://localhost:3000/recommendations', {
+        const response = await fetch('http://localhost:8080/recommendations', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
