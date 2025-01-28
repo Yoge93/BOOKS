@@ -8,7 +8,6 @@ window.onload = function() {
   // Check if all elements are successfully selected
   if (!ageGroupSelect || !genreSelect || !emailInput || !recommendationButton || !recommendationsList) {
     console.error('One or more elements are missing in the DOM.');
-    return;
   }
 
   recommendationButton.addEventListener('click', () => {
