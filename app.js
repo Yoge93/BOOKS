@@ -1,9 +1,15 @@
-document.addEventListener('DOMContentLoaded', () => {
+window.onload = function() {
   const ageGroupSelect = document.getElementById('ageGroup');
   const genreSelect = document.getElementById('genre');
   const emailInput = document.getElementById('email');
   const recommendationButton = document.getElementById('getRecommendationsButton');
   const recommendationsList = document.getElementById('recommendationsList');
+
+  // Check if all elements are successfully selected
+  if (!ageGroupSelect || !genreSelect || !emailInput || !recommendationButton || !recommendationsList) {
+    console.error('One or more elements are missing in the DOM.');
+    return;
+  }
 
   recommendationButton.addEventListener('click', () => {
     if (validateForm()) {
@@ -34,13 +40,11 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     try {
-      // Update the URL here to point to the Railway app URL
       const response = await fetch('https://books-production-377c.up.railway.app/recommendations', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ ageGroup, genre }),
       });
-      
       const recommendations = await response.json();
       displayRecommendations(recommendations);
     } catch (error) {
@@ -60,4 +64,4 @@ document.addEventListener('DOMContentLoaded', () => {
       recommendationsList.innerHTML = '<p>No recommendations found.</p>';
     }
   }
-});
+};
